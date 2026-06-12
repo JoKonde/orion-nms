@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Events\AgentWentOffline;
+use App\Events\DeviceDiscovered;
 use App\Events\MetricReceived;
 use App\Listeners\LogAgentOffline;
+use App\Listeners\LogDeviceDiscovered;
 use App\Listeners\LogMetricReceived;
 use App\Listeners\UpdateDeviceOnAgentOffline;
 use Illuminate\Auth\Events\Registered;
@@ -32,6 +34,10 @@ class EventServiceProvider extends ServiceProvider
 
         MetricReceived::class => [
             LogMetricReceived::class,
+        ],
+
+        DeviceDiscovered::class => [
+            LogDeviceDiscovered::class,
         ],
     ];
 

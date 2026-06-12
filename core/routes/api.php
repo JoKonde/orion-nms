@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\AgentController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DeviceController;
 use App\Http\Controllers\Api\V1\MetricController;
+use App\Http\Controllers\Api\V1\NetworkController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,7 +48,13 @@ Route::prefix('v1')->group(function () {
         Route::match(['put', 'patch'], '/users/{user}', [UserController::class, 'update']);
         Route::delete('/users/{user}', [UserController::class, 'destroy'])->middleware('permission:users.delete');
 
-        // Gestion des equipements reseau (Module 02)
+        // Gestion des equipements reseau (Module 02 + decouverte Module 05)
+        Route::post('/devices/discover', [DeviceController::class, 'discover']);
+
+        // Detection reseau locale + scan Nmap (Module 05 — auto-detect subnet)
+        Route::get('/network/detected', [NetworkController::class, 'detected']);
+        Route::post('/network/discover', [NetworkController::class, 'discover']);
+
         Route::apiResource('devices', DeviceController::class);
         Route::get('/devices/{device}/metrics', [MetricController::class, 'index']);
 

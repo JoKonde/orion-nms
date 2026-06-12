@@ -4,6 +4,9 @@ namespace App\Console;
 
 use App\Jobs\AggregateMetricsJob;
 use App\Jobs\CheckAgentsOfflineJob;
+use App\Jobs\DispatchMonitoringJobs;
+use App\Jobs\NmapScanJob;
+use App\Services\Monitoring\NetworkDetectionService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -34,6 +37,29 @@ class Kernel extends ConsoleKernel
         // Agregation horaire des metriques brutes -> table metrics_hourly (Module 04).
         $schedule->job(new AggregateMetricsJob)
             ->hourly()
+            ->withoutOverlapping();
+
+        /*
+         * Module 05 — Monitoring sans agent
+         * ---------------------------------
+         * Chaque minute : dispatch PingDeviceJob pour chaque device sans agent.
+         * Toutes les 5 min : idem + PollSnmpJob (SNMP plus couteux).
+         * Quotidien : scan Nmap du sous-reseau par defaut (decouverte auto).
+         */
+        $schedule->job(new DispatchMonitoringJobs(includeSnmp: false))
+            ->everyMinute()
+            ->withoutOverlapping();
+
+        $schedule->job(new DispatchMonitoringJobs(includeSnmp: true))
+            ->everyFiveMinutes()
+            ->withoutOverlapping();
+
+        // Scan Nmap quotidien : subnet .env, sinon auto-detection au moment du run.
+        $schedule->call(function () {
+            $resolved = app(NetworkDetectionService::class)->resolveDiscoverySubnet();
+            NmapScanJob::dispatch($resolved['subnet']);
+        })
+            ->daily()
             ->withoutOverlapping();
     }
 

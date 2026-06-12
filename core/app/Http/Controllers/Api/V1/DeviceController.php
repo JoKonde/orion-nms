@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Data\DeviceData;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Device\DiscoverNetworkRequest;
 use App\Http\Requests\Device\StoreDeviceRequest;
 use App\Http\Requests\Device\UpdateDeviceRequest;
 use App\Http\Resources\DeviceResource;
@@ -83,5 +84,13 @@ class DeviceController extends Controller
         $this->deviceService->delete($device);
 
         return response()->json(['message' => 'Equipement supprime.']);
+    }
+
+    /**
+     * POST /api/v1/devices/discover — alias retrocompatible (voir NetworkController).
+     */
+    public function discover(DiscoverNetworkRequest $request): JsonResponse
+    {
+        return app(NetworkController::class)->discover($request);
     }
 }

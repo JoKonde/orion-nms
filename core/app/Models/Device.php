@@ -55,4 +55,9 @@ class Device extends Model
     {
         return $this->hasMany(MetricHourly::class);
     }
+
+    public function interfaces(): HasMany
+    {
+        return $this->hasMany(DeviceInterface::class);
+    }
 }

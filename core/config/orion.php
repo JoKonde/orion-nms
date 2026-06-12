@@ -22,4 +22,20 @@ return [
         'heartbeat_timeout' => (int) env('ORION_AGENT_HEARTBEAT_TIMEOUT', 120),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Monitoring reseau sans agent (Module 05)
+    |--------------------------------------------------------------------------
+    */
+    'monitoring' => [
+        'snmp_community' => env('ORION_SNMP_COMMUNITY', 'public'),
+        'snmp_timeout' => (int) env('ORION_SNMP_TIMEOUT', 3),
+        /*
+        | Si vide : auto-detection au runtime (NetworkDetectionService).
+        | Sinon : valeur fixe pour le scheduler Nmap et les scans par defaut.
+        */
+        'default_subnet' => env('ORION_DISCOVERY_SUBNET'),
+        'ping_timeout_ms' => (int) env('ORION_PING_TIMEOUT_MS', 2000),
+    ],
+
 ];
