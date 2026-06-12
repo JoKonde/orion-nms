@@ -20,6 +20,8 @@ class MetricReceived
         public Agent $agent,
         public int $deviceId,
         public int $pointsCount,
+        /** @var array<int, array{type: string, value: float}> */
+        public array $points = [],
     ) {
     }
 }

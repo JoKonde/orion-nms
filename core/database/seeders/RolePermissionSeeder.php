@@ -48,13 +48,16 @@ class RolePermissionSeeder extends Seeder
             PermissionName::DEVICES_CREATE->value,
             PermissionName::DEVICES_UPDATE->value,
             PermissionName::AGENTS_VIEW->value,
+            PermissionName::ALERTS_VIEW->value,
+            PermissionName::ALERTS_MANAGE->value,
         ]);
 
-        // VIEWER : lecture seule (utilisateurs + equipements + agents).
+        // VIEWER : lecture seule (utilisateurs + equipements + agents + alertes).
         $viewer->syncPermissions([
             PermissionName::USERS_VIEW->value,
             PermissionName::DEVICES_VIEW->value,
             PermissionName::AGENTS_VIEW->value,
+            PermissionName::ALERTS_VIEW->value,
         ]);
     }
 }

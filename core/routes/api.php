@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AgentController;
+use App\Http\Controllers\Api\V1\AlertController;
+use App\Http\Controllers\Api\V1\AlertRuleController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DeviceController;
 use App\Http\Controllers\Api\V1\MetricController;
@@ -62,5 +64,12 @@ Route::prefix('v1')->group(function () {
         Route::get('/agents', [AgentController::class, 'index']);
         Route::get('/agents/{agent}', [AgentController::class, 'show']);
         Route::delete('/agents/{agent}', [AgentController::class, 'destroy']);
+
+        // Alertes (Module 06)
+        Route::apiResource('alert-rules', AlertRuleController::class);
+        Route::get('/alerts', [AlertController::class, 'index']);
+        Route::get('/alerts/{alert}', [AlertController::class, 'show']);
+        Route::post('/alerts/{alert}/acknowledge', [AlertController::class, 'acknowledge']);
+        Route::post('/alerts/{alert}/resolve', [AlertController::class, 'resolve']);
     });
 });

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 /**
  * Journalise l'ingestion de metriques (audit / debug).
  *
- * Module 06 ajoutera un Listener AlertEvaluatorOnMetricReceived ici.
+ * Module 06 : EvaluateAlertsOnMetricReceived evalue les seuils ici.
  * Module 09 ajoutera un Listener BroadcastMetricToDashboard.
  */
 class LogMetricReceived

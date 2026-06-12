@@ -47,14 +47,19 @@ class MetricIngestionService
             return 0;
         }
 
-        return DB::transaction(function () use ($rows, $agent, $deviceId) {
+        $points = array_map(fn ($row) => [
+            'type' => $row['metric_type'],
+            'value' => (float) $row['value'],
+        ], $rows);
+
+        return DB::transaction(function () use ($rows, $agent, $deviceId, $points) {
             // insert() en masse : 1 requete SQL au lieu de N create() — critique pour le volume NMS.
             foreach (array_chunk($rows, 500) as $chunk) {
                 Metric::insert($chunk);
             }
 
             // Event : decouple l'evaluation des alertes (Module 06) et le broadcast Reverb (Module 09).
-            MetricReceived::dispatch($agent, $deviceId, count($rows));
+            MetricReceived::dispatch($agent, $deviceId, count($rows), $points);
 
             return count($rows);
         });

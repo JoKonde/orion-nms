@@ -32,5 +32,8 @@ class DatabaseSeeder extends Seeder
 
         // 3) Equipements de demonstration (Module 02).
         $this->call(DeviceSeeder::class);
+
+        // 4) Regles d'alerte par defaut (Module 06).
+        $this->call(AlertRuleSeeder::class);
     }
 }

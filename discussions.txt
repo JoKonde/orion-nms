@@ -3,6 +3,43 @@ ORION NMS — Journal de projet
 ================================================================================
 
 --------------------------------------------------------------------------------
+[2026-06-12 19:00] — Session : Realisation Module 06 (Alerting)
+--------------------------------------------------------------------------------
+
+TRAVAIL REALISE (Module 06)
+---------------------------
+- Migrations : alert_rules, alerts
+- Enums : AlertSeverity, AlertStatus, AlertRuleType, AlertOperator
+- Models : AlertRule, Alert (+ relations Device)
+- DTO : AlertRuleData (Spatie Laravel Data)
+- Services : AlertRuleService (CRUD), AlertService (ack/resolve), AlertEvaluator (seuils)
+- Events : AlertRaised, DeviceWentOffline, DeviceBackOnline
+- Listeners : EvaluateAlertsOnMetricReceived, EvaluateAlertsOnDeviceOffline,
+  ResolveAlertsOnDeviceOnline, LogAlertRaised
+- Branchement MetricReceived (points metriques dans l'event)
+- Branchement offline : AgentWentOffline + DeviceMonitoringService ping/SNMP
+- Permissions : alerts.view, alerts.manage
+- Seeder : 5 regles par defaut (CPU, RAM, disk, temp, device offline)
+- Auto-resolu quand metrique revient sous le seuil ou device repasse online
+- Cooldown 15 min entre re-declenchements identiques
+
+ROUTES API
+----------
+- CRUD /api/v1/alert-rules
+- GET  /api/v1/alerts?status=&severity=&device_id=
+- GET  /api/v1/alerts/{id}
+- POST /api/v1/alerts/{id}/acknowledge
+- POST /api/v1/alerts/{id}/resolve
+
+TESTS EFFECTUES (OK)
+--------------------
+- AlertEvaluator CPU 95% sur device 1 -> alerte [critical] CPU eleve creee
+
+PROCHAINE ETAPE
+---------------
+- Module 07 : Incidents (cycle de vie, liaison alerte -> incident)
+
+--------------------------------------------------------------------------------
 [2026-06-12 18:30] — Session : Auto-detection reseau + fallback subnet (Module 05+)
 --------------------------------------------------------------------------------
 

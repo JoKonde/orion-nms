@@ -34,6 +34,10 @@ enum PermissionName: string
     case AGENTS_VIEW = 'agents.view';
     case AGENTS_DELETE = 'agents.delete';
 
+    // Alertes (Module 06)
+    case ALERTS_VIEW = 'alerts.view';
+    case ALERTS_MANAGE = 'alerts.manage';
+
     /**
      * Retourne la liste de toutes les permissions sous forme de chaines.
      *
