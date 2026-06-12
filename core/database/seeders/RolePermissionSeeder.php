@@ -40,15 +40,19 @@ class RolePermissionSeeder extends Seeder
         // ADMIN : toutes les permissions.
         $admin->syncPermissions(PermissionName::values());
 
-        // OPERATOR : peut consulter les utilisateurs et les roles (pas creer/supprimer).
+        // OPERATOR : supervise le reseau (equipements CRUD sauf suppression users).
         $operator->syncPermissions([
             PermissionName::USERS_VIEW->value,
             PermissionName::ROLES_VIEW->value,
+            PermissionName::DEVICES_VIEW->value,
+            PermissionName::DEVICES_CREATE->value,
+            PermissionName::DEVICES_UPDATE->value,
         ]);
 
-        // VIEWER : lecture seule basique.
+        // VIEWER : lecture seule (utilisateurs + equipements).
         $viewer->syncPermissions([
             PermissionName::USERS_VIEW->value,
+            PermissionName::DEVICES_VIEW->value,
         ]);
     }
 }

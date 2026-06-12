@@ -24,6 +24,12 @@ enum PermissionName: string
     case ROLES_VIEW = 'roles.view';
     case ROLES_MANAGE = 'roles.manage';
 
+    // Gestion des equipements (Module 02)
+    case DEVICES_VIEW = 'devices.view';
+    case DEVICES_CREATE = 'devices.create';
+    case DEVICES_UPDATE = 'devices.update';
+    case DEVICES_DELETE = 'devices.delete';
+
     /**
      * Retourne la liste de toutes les permissions sous forme de chaines.
      *

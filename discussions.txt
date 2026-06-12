@@ -3,6 +3,32 @@ ORION NMS — Journal de projet
 ================================================================================
 
 --------------------------------------------------------------------------------
+[2026-06-11 13:30] — Session : Realisation Module 02 (Devices)
+--------------------------------------------------------------------------------
+
+TRAVAIL REALISE (Module 02)
+---------------------------
+- Migration table devices (ip, mac, type, vendor, model, firmware, status, discovery_method...)
+- Enums : DeviceType, DeviceStatus, DiscoveryMethod
+- Model Device (casts enum)
+- DeviceData (Spatie Laravel Data) — DTO type avec commentaires pedagogiques
+- DeviceService (CRUD + filtres type/status/search)
+- Form Requests : StoreDeviceRequest, UpdateDeviceRequest
+- DevicePolicy + enregistrement AuthServiceProvider
+- DeviceResource + DeviceController (API V1)
+- Routes : apiResource /api/v1/devices (5 routes)
+- Permissions : devices.view/create/update/delete (+ seeder roles mis a jour)
+- DeviceSeeder : 3 equipements demo (routeur, switch, serveur)
+
+TESTS EFFECTUES (OK)
+--------------------
+- GET /api/v1/devices -> 3 equipements (Routeur principal, etc.) OK
+
+PROCHAINE ETAPE
+---------------
+- Module 03 : Agents (enregistrement, API key, heartbeat)
+
+--------------------------------------------------------------------------------
 [2026-06-11 12:15] — Session : Realisation Module 01 (Foundation Auth + RBAC)
 --------------------------------------------------------------------------------
 
