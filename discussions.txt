@@ -3,6 +3,47 @@ ORION NMS — Journal de projet
 ================================================================================
 
 --------------------------------------------------------------------------------
+[2026-06-12 19:30] — Session : Realisation Module 07 (Incidents)
+--------------------------------------------------------------------------------
+
+TRAVAIL REALISE (Module 07)
+---------------------------
+- Migration : incidents (statut, priorite, liaison alerte/device, assignation)
+- Enums : IncidentStatus, IncidentPriority
+- Model Incident + relations (device, alert, creator, assignee...)
+- DTOs : IncidentData, IncidentTransitionData
+- IncidentService : CRUD + machine a etats + escalade alerte
+- Events : IncidentUpdated (action: created, assigned, resolved, auto_escalated...)
+- Listeners : EscalateCriticalAlertToIncident (alerte critical -> incident auto),
+  LogIncidentUpdated
+- Permissions : incidents.view/create/update/assign/close
+- API transitions : assign, start, resolve, close
+- POST /alerts/{alert}/escalate (escalade manuelle)
+
+CYCLE DE VIE
+------------
+open → assigned → in_progress → resolved → closed
+(open peut aussi passer directement a in_progress)
+
+ROUTES API
+----------
+- CRUD /api/v1/incidents
+- POST /api/v1/incidents/{id}/assign   { assigned_to }
+- POST /api/v1/incidents/{id}/start
+- POST /api/v1/incidents/{id}/resolve  { resolution_notes? }
+- POST /api/v1/incidents/{id}/close
+- POST /api/v1/alerts/{id}/escalate
+
+TESTS EFFECTUES (OK)
+--------------------
+- Auto-escalade alerte critical -> incident [Auto] ...
+- Cycle complet : assign → start → resolve → close OK
+
+PROCHAINE ETAPE
+---------------
+- Module 08 : Topology (cartographie reseau Cytoscape)
+
+--------------------------------------------------------------------------------
 [2026-06-12 19:00] — Session : Realisation Module 06 (Alerting)
 --------------------------------------------------------------------------------
 

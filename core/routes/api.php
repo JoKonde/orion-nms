@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AlertController;
 use App\Http\Controllers\Api\V1\AlertRuleController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DeviceController;
+use App\Http\Controllers\Api\V1\IncidentController;
 use App\Http\Controllers\Api\V1\MetricController;
 use App\Http\Controllers\Api\V1\NetworkController;
 use App\Http\Controllers\Api\V1\UserController;
@@ -71,5 +72,13 @@ Route::prefix('v1')->group(function () {
         Route::get('/alerts/{alert}', [AlertController::class, 'show']);
         Route::post('/alerts/{alert}/acknowledge', [AlertController::class, 'acknowledge']);
         Route::post('/alerts/{alert}/resolve', [AlertController::class, 'resolve']);
+        Route::post('/alerts/{alert}/escalate', [IncidentController::class, 'escalateFromAlert']);
+
+        // Incidents (Module 07)
+        Route::apiResource('incidents', IncidentController::class);
+        Route::post('/incidents/{incident}/assign', [IncidentController::class, 'assign']);
+        Route::post('/incidents/{incident}/start', [IncidentController::class, 'start']);
+        Route::post('/incidents/{incident}/resolve', [IncidentController::class, 'resolve']);
+        Route::post('/incidents/{incident}/close', [IncidentController::class, 'close']);
     });
 });

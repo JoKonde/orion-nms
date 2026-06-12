@@ -7,12 +7,15 @@ use App\Events\AlertRaised;
 use App\Events\DeviceBackOnline;
 use App\Events\DeviceDiscovered;
 use App\Events\DeviceWentOffline;
+use App\Events\IncidentUpdated;
 use App\Events\MetricReceived;
+use App\Listeners\EscalateCriticalAlertToIncident;
 use App\Listeners\EvaluateAlertsOnDeviceOffline;
 use App\Listeners\EvaluateAlertsOnMetricReceived;
 use App\Listeners\LogAgentOffline;
 use App\Listeners\LogAlertRaised;
 use App\Listeners\LogDeviceDiscovered;
+use App\Listeners\LogIncidentUpdated;
 use App\Listeners\LogMetricReceived;
 use App\Listeners\ResolveAlertsOnDeviceOnline;
 use App\Listeners\UpdateDeviceOnAgentOffline;
@@ -50,6 +53,11 @@ class EventServiceProvider extends ServiceProvider
 
         AlertRaised::class => [
             LogAlertRaised::class,
+            EscalateCriticalAlertToIncident::class,
+        ],
+
+        IncidentUpdated::class => [
+            LogIncidentUpdated::class,
         ],
 
         DeviceWentOffline::class => [

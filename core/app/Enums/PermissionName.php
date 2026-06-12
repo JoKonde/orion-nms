@@ -38,6 +38,13 @@ enum PermissionName: string
     case ALERTS_VIEW = 'alerts.view';
     case ALERTS_MANAGE = 'alerts.manage';
 
+    // Incidents (Module 07)
+    case INCIDENTS_VIEW = 'incidents.view';
+    case INCIDENTS_CREATE = 'incidents.create';
+    case INCIDENTS_UPDATE = 'incidents.update';
+    case INCIDENTS_ASSIGN = 'incidents.assign';
+    case INCIDENTS_CLOSE = 'incidents.close';
+
     /**
      * Retourne la liste de toutes les permissions sous forme de chaines.
      *

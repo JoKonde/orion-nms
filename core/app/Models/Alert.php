@@ -55,4 +55,9 @@ class Alert extends Model
     {
         return $this->belongsTo(User::class, 'resolved_by');
     }
+
+    public function incident(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Incident::class);
+    }
 }

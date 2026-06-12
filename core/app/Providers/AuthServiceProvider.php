@@ -17,6 +17,7 @@ class AuthServiceProvider extends ServiceProvider
         \App\Models\Agent::class => \App\Policies\AgentPolicy::class,
         \App\Models\AlertRule::class => \App\Policies\AlertRulePolicy::class,
         \App\Models\Alert::class => \App\Policies\AlertPolicy::class,
+        \App\Models\Incident::class => \App\Policies\IncidentPolicy::class,
     ];
 
     /**

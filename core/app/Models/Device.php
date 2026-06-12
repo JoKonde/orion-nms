@@ -65,4 +65,9 @@ class Device extends Model
     {
         return $this->hasMany(Alert::class);
     }
+
+    public function incidents(): HasMany
+    {
+        return $this->hasMany(Incident::class);
+    }
 }
