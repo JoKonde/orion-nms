@@ -7,6 +7,8 @@ use App\Enums\DeviceType;
 use App\Enums\DiscoveryMethod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * Modele Device — represente un equipement reseau supervise par ORION.
@@ -38,4 +40,19 @@ class Device extends Model
         'uptime_seconds' => 'integer',
         'last_seen_at' => 'datetime',
     ];
+
+    public function agent(): HasOne
+    {
+        return $this->hasOne(Agent::class);
+    }
+
+    public function metrics(): HasMany
+    {
+        return $this->hasMany(Metric::class);
+    }
+
+    public function metricsHourly(): HasMany
+    {
+        return $this->hasMany(MetricHourly::class);
+    }
 }

@@ -2,6 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\AgentWentOffline;
+use App\Events\MetricReceived;
+use App\Listeners\LogAgentOffline;
+use App\Listeners\LogMetricReceived;
+use App\Listeners\UpdateDeviceOnAgentOffline;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +22,16 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        // Module 03 : quand un agent passe offline, plusieurs listeners reagissent.
+        AgentWentOffline::class => [
+            UpdateDeviceOnAgentOffline::class,
+            LogAgentOffline::class,
+        ],
+
+        MetricReceived::class => [
+            LogMetricReceived::class,
         ],
     ];
 

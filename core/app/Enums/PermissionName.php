@@ -30,6 +30,10 @@ enum PermissionName: string
     case DEVICES_UPDATE = 'devices.update';
     case DEVICES_DELETE = 'devices.delete';
 
+    // Gestion des agents (Module 03)
+    case AGENTS_VIEW = 'agents.view';
+    case AGENTS_DELETE = 'agents.delete';
+
     /**
      * Retourne la liste de toutes les permissions sous forme de chaines.
      *

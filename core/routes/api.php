@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AgentController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DeviceController;
+use App\Http\Controllers\Api\V1\MetricController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +20,15 @@ Route::prefix('v1')->group(function () {
 
     // --- Routes publiques (pas besoin d'etre connecte) ---
     Route::post('/auth/login', [AuthController::class, 'login']);
+
+    // Auto-enregistrement agent (cle bootstrap requise dans le header).
+    Route::post('/agents/register', [AgentController::class, 'register']);
+
+    // Routes agent authentifiees par cle API (pas Sanctum).
+    Route::middleware('agent.api')->group(function () {
+        Route::post('/agents/heartbeat', [AgentController::class, 'heartbeat']);
+        Route::post('/agents/metrics', [MetricController::class, 'store']);
+    });
 
     // --- Routes protegees (token Sanctum obligatoire) ---
     Route::middleware('auth:sanctum')->group(function () {
@@ -38,5 +49,11 @@ Route::prefix('v1')->group(function () {
 
         // Gestion des equipements reseau (Module 02)
         Route::apiResource('devices', DeviceController::class);
+        Route::get('/devices/{device}/metrics', [MetricController::class, 'index']);
+
+        // Gestion des agents (Module 03) — consultation admin
+        Route::get('/agents', [AgentController::class, 'index']);
+        Route::get('/agents/{agent}', [AgentController::class, 'show']);
+        Route::delete('/agents/{agent}', [AgentController::class, 'destroy']);
     });
 });

@@ -3,6 +3,108 @@ ORION NMS — Journal de projet
 ================================================================================
 
 --------------------------------------------------------------------------------
+[2026-06-12 16:15] — Session : Realisation Module 04 (Metrics)
+--------------------------------------------------------------------------------
+
+TRAVAIL REALISE (Module 04)
+---------------------------
+- Migrations : metrics (brutes), metrics_hourly (agregats)
+- Enum MetricType (cpu, ram, disk, temperature, network_in/out...)
+- Models Metric, MetricHourly + relations Device
+- DTOs : MetricPointData, MetricBatchData (Spatie Laravel Data + commentaires)
+- MetricIngestionService (insert bulk 500/lot, Event MetricReceived)
+- AggregateMetricsJob (Scheduler horaire) + commentaires Jobs/Scheduler
+- Event MetricReceived + Listener LogMetricReceived (Module 06/09 a brancher)
+- MetricController : POST /agents/metrics + GET /devices/{device}/metrics
+- Filtres consultation : type, from, to, granularity=raw|hourly
+
+ROUTES
+------
+- POST /api/v1/agents/metrics (middleware agent.api)
+- GET  /api/v1/devices/{device}/metrics?type=cpu&from=&to=&granularity=raw
+
+TESTS EFFECTUES (OK)
+--------------------
+- Ingestion batch 2 points (cpu, ram) -> inserted=2 OK
+- Consultation admin GET metrics type=cpu -> 1 point OK
+
+PROCHAINE ETAPE
+---------------
+- Module 05 : Monitoring (Ping, SNMP, Nmap)
+
+--------------------------------------------------------------------------------
+[2026-06-12 16:45] — Session : Realisation Module 03 (Agents)
+--------------------------------------------------------------------------------
+
+TRAVAIL REALISE (Module 03)
+---------------------------
+- config/orion.php (bootstrap_key, heartbeat_timeout)
+- Migrations : agents, heartbeats
+- Enums : AgentStatus (online/offline)
+- Models : Agent, Heartbeat (+ relation Device <-> Agent)
+- DTOs : AgentRegisterData, HeartbeatData (Spatie Laravel Data)
+- Services : AgentRegistrationService, AgentHeartbeatService, AgentService
+- Middleware : AgentApiKeyAuth (Bearer + fallback X-Agent-Api-Key)
+- Job : CheckAgentsOfflineJob (ShouldQueue, commentaires Jobs+Redis)
+- Event : AgentWentOffline + Listeners (UpdateDeviceOnAgentOffline, LogAgentOffline)
+- Scheduler : Kernel.php everyMinute + withoutOverlapping (commentaires Scheduler)
+- Controller, Requests, Policy, AgentResource, routes API
+- Permissions : agents.view, agents.delete
+
+ROUTES AGENT
+------------
+- POST /api/v1/agents/register (header X-Orion-Bootstrap-Key)
+- POST /api/v1/agents/heartbeat (middleware agent.api)
+- GET/DELETE /api/v1/agents (Sanctum admin)
+
+TESTS EFFECTUES (OK)
+--------------------
+- Register agent + heartbeat -> status online OK
+
+PROCHAINE ETAPE
+---------------
+- Module 04 : Metrics (ingestion bulk metriques agent)
+
+--------------------------------------------------------------------------------
+[2026-06-12] — Decision : ordre de developpement interfaces
+--------------------------------------------------------------------------------
+
+DECISION
+--------
+1. Finir TOUTE la partie Laravel (Core, modules 04 a 12) AVANT le dashboard admin React.
+2. Ensuite : orion/dashboard/ (React.js) — interface administrateur.
+3. Ensuite (ou en parallele selon avancement) : orion/agent/ (React.js + Electron) — interface locale agent Windows/Ubuntu.
+
+Ordre retenu :
+  Core Laravel (01-12) → Dashboard React admin → Agent Electron+React
+
+--------------------------------------------------------------------------------
+[2026-06-12] — Decision : enregistrement des equipements (auto + flux admin)
+--------------------------------------------------------------------------------
+
+DECISION VALIDEE PAR L'UTILISATEUR
+----------------------------------
+Combiner les deux approches :
+
+1. ENREGISTREMENT AUTOMATIQUE (prevu architecture ORION)
+   - Agent ORION (Module 03) : cree un Device type "server" a l'auto-enregistrement
+   - Nmap / SNMP / Ping (Module 05) : decouverte et creation/mise a jour auto
+   - discovery_method : manual | nmap | snmp | ping | agent
+
+2. FLUX ADMIN MANUEL (vision utilisateur — dashboard React plus tard)
+   - Page liste de tous les equipements du reseau
+   - Clic sur un equipement → popup (modal) avec details pre-remplis
+   - Modification des champs → bouton Enregistrer → PUT /api/v1/devices/{id}
+   - Permet aussi l'ajout manuel (POST /api/v1/devices) si decouverte auto rate
+
+ETAT ACTUEL
+-----------
+- API manuelle (CRUD devices) : Module 02 OK
+- Auto via agent : Module 03 OK
+- Auto via Nmap/SNMP : Module 05 (a venir)
+- Interface React (liste + modal) : orion/dashboard/ (apres Core Laravel)
+
+--------------------------------------------------------------------------------
 [2026-06-11 13:30] — Session : Realisation Module 02 (Devices)
 --------------------------------------------------------------------------------
 
