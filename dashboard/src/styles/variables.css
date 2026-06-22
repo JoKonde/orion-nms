@@ -1,0 +1,35 @@
+:root {
+  /* Couleurs — theme dark NMS ORION */
+  --color-bg-root: #0b0f17;
+  --color-bg-sidebar: #111827;
+  --color-bg-main: #0f1520;
+  --color-bg-card: #1a2234;
+  --color-bg-elevated: #222d42;
+  --color-border: #2a3548;
+  --color-border-light: #374151;
+  --color-text: #e5e7eb;
+  --color-text-muted: #9ca3af;
+  --color-text-dim: #6b7280;
+  --color-accent: #3b82f6;
+  --color-accent-hover: #2563eb;
+  --color-accent-soft: rgba(59, 130, 246, 0.12);
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
+  /* Layout */
+  --sidebar-width: 260px;
+  --header-height: 56px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.45);
+
+  /* Typographie */
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Cascadia Code', Consolas, 'Courier New', monospace;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+}

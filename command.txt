@@ -1,0 +1,3 @@
+php artisan schedule:work
+php artisan reverb:start
+php artisan orion:network-detect --scan

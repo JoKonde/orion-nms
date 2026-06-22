@@ -1,0 +1,161 @@
+:root {
+  color-scheme: dark;
+  --bg: #0f1419;
+  --card: #1a2234;
+  --border: #2a3548;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #3b82f6;
+  --ok: #22c55e;
+  --danger: #ef4444;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.agent-app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+.agent-header h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.agent-subtitle {
+  margin: 0.35rem 0 1rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.agent-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.agent-card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+}
+
+.agent-dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 1rem;
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem;
+}
+
+.agent-dl dt {
+  color: var(--muted);
+}
+
+.agent-dl dd {
+  margin: 0;
+}
+
+.mono {
+  font-family: ui-monospace, monospace;
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+
+.pill {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pill--ok {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--ok);
+}
+
+.pill--off {
+  background: rgba(156, 163, 175, 0.15);
+  color: var(--muted);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.field span {
+  color: var(--muted);
+}
+
+.field input {
+  padding: 0.55rem 0.65rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.agent-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.btn--ghost {
+  background: transparent;
+}
+
+.agent-error {
+  color: #fca5a5;
+  font-size: 0.8125rem;
+  margin: 0 0 0.75rem;
+}
+
+.agent-msg {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--accent);
+}
+
+.agent-footer {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}

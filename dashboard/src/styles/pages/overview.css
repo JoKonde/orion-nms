@@ -1,0 +1,37 @@
+.overview-page__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.overview-health-panel {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.overview-health-panel__gauge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.overview-health-panel__gauge .card__title {
+  align-self: flex-start;
+  width: 100%;
+}
+
+.overview-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .overview-health-panel {
+    grid-template-columns: 1fr;
+  }
+}
