@@ -29,11 +29,5 @@ class DatabaseSeeder extends Seeder
 
         // On lui donne le role admin (= toutes les permissions).
         $admin->syncRoles([RoleName::ADMIN->value]);
-
-        // 3) Equipements de demonstration (Module 02).
-        $this->call(DeviceSeeder::class);
-
-        // 4) Regles d'alerte par defaut (Module 06).
-        $this->call(AlertRuleSeeder::class);
     }
 }

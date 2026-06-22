@@ -11,11 +11,6 @@ use Illuminate\Queue\SerializesModels;
 
 /**
  * NmapScanJob — decouverte automatique des hotes sur un sous-reseau.
- *
- * Declenche par le Scheduler (quotidien) ou manuellement via :
- *   php artisan orion:discover 192.168.1.0/24
- *
- * Cree les nouveaux devices et emet DeviceDiscovered pour chaque nouvel hote.
  */
 class NmapScanJob implements ShouldQueue
 {
@@ -25,9 +20,37 @@ class NmapScanJob implements ShouldQueue
     {
     }
 
-    public function handle(NmapService $nmapService): void
+    /**
+     * @return array{
+     *     success: bool,
+     *     hosts_found: int,
+     *     devices_created: int,
+     *     devices_updated: int,
+     *     devices_removed: int,
+     *     nmap_binary: ?string,
+     *     error: ?string,
+     *     warning: ?string
+     * }
+     */
+    public static function runSync(string $subnet): array
     {
-        $hosts = $nmapService->scanSubnet($this->subnet);
-        $nmapService->persistDiscoveredHosts($hosts);
+        return (new self($subnet))->handle(app(NmapService::class));
+    }
+
+    /**
+     * @return array{
+     *     success: bool,
+     *     hosts_found: int,
+     *     devices_created: int,
+     *     devices_updated: int,
+     *     devices_removed: int,
+     *     nmap_binary: ?string,
+     *     error: ?string,
+     *     warning: ?string
+     * }
+     */
+    public function handle(NmapService $nmapService): array
+    {
+        return $nmapService->discoverSubnet($this->subnet);
     }
 }

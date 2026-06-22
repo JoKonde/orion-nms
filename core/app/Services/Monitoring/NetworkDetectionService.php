@@ -2,7 +2,8 @@
 
 namespace App\Services\Monitoring;
 
-use Symfony\Component\Process\Process;
+use App\Support\ProcessHelper;
+use App\Support\TextEncoding;
 
 /**
  * NetworkDetectionService — detecte l'IP locale et le sous-reseau du serveur ORION.
@@ -91,7 +92,9 @@ class NetworkDetectionService
             'configured_subnet' => $configured ?: null,
             'effective_subnet' => $resolved['subnet'],
             'source' => $resolved['source'],
-            'scan_prompt' => "Réseau détecté : {$resolved['subnet']} — Scanner ?",
+            'scan_prompt' => "Réseau détecté : {$resolved['subnet']} — lancez le scan via le terminal Laravel.",
+            'cli_scan_command' => 'php artisan orion:network-detect --scan',
+            'cli_scan_command_subnet' => "php artisan orion:discover {$resolved['subnet']}",
             'message' => $resolved['message'],
             // Aide pour le champ subnet du dashboard React (saisie manuelle par l'admin).
             'subnet_help' => [
@@ -100,6 +103,35 @@ class NetworkDetectionService
                 'example' => '192.168.1.0/24',
             ],
         ];
+    }
+
+    /**
+     * Indique si une IPv4 appartient au sous-reseau CIDR (ex: 192.168.1.10 dans 192.168.1.0/24).
+     */
+    public function ipBelongsToSubnet(string $ip, string $cidr): bool
+    {
+        if (! str_contains($cidr, '/')) {
+            return false;
+        }
+
+        [$network, $prefixRaw] = explode('/', $cidr, 2);
+        $prefix = (int) $prefixRaw;
+
+        if ($prefix < 0 || $prefix > 32) {
+            return false;
+        }
+
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false) {
+            return false;
+        }
+
+        if (filter_var($network, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false) {
+            return false;
+        }
+
+        $mask = -1 << (32 - $prefix);
+
+        return (ip2long($ip) & $mask) === (ip2long($network) & $mask);
     }
 
     /**
@@ -119,19 +151,21 @@ class NetworkDetectionService
      */
     private function parseWindowsIpconfig(): array
     {
-        $process = new Process(['ipconfig']);
+        $process = ProcessHelper::make(['ipconfig'], timeout: 60);
         $process->run();
 
         if (! $process->isSuccessful()) {
             return [];
         }
 
+        $output = TextEncoding::toUtf8($process->getOutput()) ?? $process->getOutput();
+
         $interfaces = [];
         $currentName = 'Interface';
         $currentIp = null;
         $currentMask = null;
 
-        foreach (explode("\n", $process->getOutput()) as $line) {
+        foreach (explode("\n", $output) as $line) {
             $line = rtrim($line);
 
             if ($line === '') {
@@ -171,7 +205,7 @@ class NetworkDetectionService
      */
     private function parseLinuxIpAddr(): array
     {
-        $process = new Process(['ip', '-4', '-o', 'addr', 'show']);
+        $process = ProcessHelper::make(['ip', '-4', '-o', 'addr', 'show'], timeout: 30);
         $process->run();
 
         if (! $process->isSuccessful()) {
@@ -209,7 +243,7 @@ class NetworkDetectionService
     private function makeInterface(string $name, string $ip, string $netmask): array
     {
         return [
-            'name' => $name,
+            'name' => TextEncoding::toUtf8($name) ?? $name,
             'ip' => $ip,
             'netmask' => $netmask,
             'subnet' => $this->ipAndNetmaskToCidr($ip, $netmask),

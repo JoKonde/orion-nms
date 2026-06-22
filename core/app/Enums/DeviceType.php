@@ -16,7 +16,7 @@ enum DeviceType: string
     case FIREWALL = 'firewall';
     case PRINTER = 'printer';
     case ACCESS_POINT = 'access_point';
-    case SERVER = 'server';
+    case PC = 'pc';
     case OTHER = 'other';
 
     /**

@@ -9,14 +9,18 @@ use App\Events\DeviceDiscovered;
 use App\Events\DeviceWentOffline;
 use App\Events\IncidentUpdated;
 use App\Events\MetricReceived;
+use App\Events\TopologyUpdated;
 use App\Listeners\EscalateCriticalAlertToIncident;
 use App\Listeners\EvaluateAlertsOnDeviceOffline;
 use App\Listeners\EvaluateAlertsOnMetricReceived;
+use App\Listeners\LinkDeviceOnDiscovery;
 use App\Listeners\LogAgentOffline;
 use App\Listeners\LogAlertRaised;
 use App\Listeners\LogDeviceDiscovered;
 use App\Listeners\LogIncidentUpdated;
 use App\Listeners\LogMetricReceived;
+use App\Listeners\LogTopologyUpdated;
+use App\Listeners\RefreshTopologyOnDeviceStatus;
 use App\Listeners\ResolveAlertsOnDeviceOnline;
 use App\Listeners\UpdateDeviceOnAgentOffline;
 use Illuminate\Auth\Events\Registered;
@@ -49,6 +53,7 @@ class EventServiceProvider extends ServiceProvider
 
         DeviceDiscovered::class => [
             LogDeviceDiscovered::class,
+            LinkDeviceOnDiscovery::class,
         ],
 
         AlertRaised::class => [
@@ -62,10 +67,16 @@ class EventServiceProvider extends ServiceProvider
 
         DeviceWentOffline::class => [
             EvaluateAlertsOnDeviceOffline::class,
+            RefreshTopologyOnDeviceStatus::class,
         ],
 
         DeviceBackOnline::class => [
             ResolveAlertsOnDeviceOnline::class,
+            RefreshTopologyOnDeviceStatus::class,
+        ],
+
+        TopologyUpdated::class => [
+            LogTopologyUpdated::class,
         ],
     ];
 

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Data\HeartbeatData;
 use App\Enums\AgentStatus;
 use App\Enums\DeviceStatus;
+use App\Events\AgentStatusChanged;
 use App\Models\Agent;
 use App\Models\Heartbeat;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +24,7 @@ class AgentHeartbeatService
     {
         return DB::transaction(function () use ($agent, $data) {
             $now = now();
+            $previousStatus = $agent->status->value;
 
             $agent->update([
                 'status' => AgentStatus::ONLINE,
@@ -40,7 +42,13 @@ class AgentHeartbeatService
                 'last_seen_at' => $now,
             ]);
 
-            return $agent->fresh()->load('device');
+            $fresh = $agent->fresh()->load('device');
+
+            if ($previousStatus === AgentStatus::OFFLINE->value) {
+                AgentStatusChanged::dispatch($fresh, $previousStatus);
+            }
+
+            return $fresh;
         });
     }
 }

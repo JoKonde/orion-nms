@@ -4,10 +4,13 @@ use App\Http\Controllers\Api\V1\AgentController;
 use App\Http\Controllers\Api\V1\AlertController;
 use App\Http\Controllers\Api\V1\AlertRuleController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\DeviceController;
 use App\Http\Controllers\Api\V1\IncidentController;
 use App\Http\Controllers\Api\V1\MetricController;
 use App\Http\Controllers\Api\V1\NetworkController;
+use App\Http\Controllers\Api\V1\RealtimeController;
+use App\Http\Controllers\Api\V1\TopologyController;
 use App\Http\Controllers\Api\V1\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -80,5 +83,20 @@ Route::prefix('v1')->group(function () {
         Route::post('/incidents/{incident}/start', [IncidentController::class, 'start']);
         Route::post('/incidents/{incident}/resolve', [IncidentController::class, 'resolve']);
         Route::post('/incidents/{incident}/close', [IncidentController::class, 'close']);
+
+        // Topologie reseau (Module 08 — Cytoscape.js)
+        Route::get('/topology', [TopologyController::class, 'index']);
+        Route::get('/topology/links', [TopologyController::class, 'links']);
+        Route::post('/topology/rebuild', [TopologyController::class, 'rebuild']);
+
+        // Dashboard global (Module 12)
+        Route::get('/dashboard/overview', [DashboardController::class, 'overview'])
+            ->middleware('permission:dashboard.view');
+        Route::get('/dashboard/health', [DashboardController::class, 'health'])
+            ->middleware('permission:dashboard.view');
+
+        // Temps reel Reverb (Module 09)
+        Route::get('/realtime/config', [RealtimeController::class, 'config'])
+            ->middleware('permission:dashboard.view');
     });
 });

@@ -45,6 +45,13 @@ enum PermissionName: string
     case INCIDENTS_ASSIGN = 'incidents.assign';
     case INCIDENTS_CLOSE = 'incidents.close';
 
+    // Topologie reseau (Module 08)
+    case TOPOLOGY_VIEW = 'topology.view';
+    case TOPOLOGY_MANAGE = 'topology.manage';
+
+    // Dashboard (Module 12)
+    case DASHBOARD_VIEW = 'dashboard.view';
+
     /**
      * Retourne la liste de toutes les permissions sous forme de chaines.
      *

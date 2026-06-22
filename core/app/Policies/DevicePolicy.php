@@ -38,4 +38,12 @@ class DevicePolicy
     {
         return $user->can(PermissionName::DEVICES_DELETE->value);
     }
+
+    /**
+     * Consultation cartographie reseau (Module 08).
+     */
+    public function viewTopology(User $user): bool
+    {
+        return $user->can(PermissionName::TOPOLOGY_VIEW->value);
+    }
 }

@@ -55,6 +55,9 @@ class RolePermissionSeeder extends Seeder
             PermissionName::INCIDENTS_UPDATE->value,
             PermissionName::INCIDENTS_ASSIGN->value,
             PermissionName::INCIDENTS_CLOSE->value,
+            PermissionName::TOPOLOGY_VIEW->value,
+            PermissionName::TOPOLOGY_MANAGE->value,
+            PermissionName::DASHBOARD_VIEW->value,
         ]);
 
         // VIEWER : lecture seule.
@@ -64,6 +67,8 @@ class RolePermissionSeeder extends Seeder
             PermissionName::AGENTS_VIEW->value,
             PermissionName::ALERTS_VIEW->value,
             PermissionName::INCIDENTS_VIEW->value,
+            PermissionName::TOPOLOGY_VIEW->value,
+            PermissionName::DASHBOARD_VIEW->value,
         ]);
     }
 }

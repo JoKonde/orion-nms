@@ -70,4 +70,14 @@ class Device extends Model
     {
         return $this->hasMany(Incident::class);
     }
+
+    public function topologyLinksAsSource(): HasMany
+    {
+        return $this->hasMany(TopologyLink::class, 'source_device_id');
+    }
+
+    public function topologyLinksAsTarget(): HasMany
+    {
+        return $this->hasMany(TopologyLink::class, 'target_device_id');
+    }
 }

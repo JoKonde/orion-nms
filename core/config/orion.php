@@ -36,6 +36,18 @@ return [
         */
         'default_subnet' => env('ORION_DISCOVERY_SUBNET'),
         'ping_timeout_ms' => (int) env('ORION_PING_TIMEOUT_MS', 2000),
+        // Chemin complet vers nmap (Windows : php artisan serve n'a pas toujours le PATH).
+        'nmap_binary' => env('ORION_NMAP_BINARY'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard API (Module 12)
+    |--------------------------------------------------------------------------
+    */
+    'dashboard' => [
+        // TTL cache Redis en secondes pour overview / health.
+        'cache_ttl' => (int) env('ORION_DASHBOARD_CACHE_TTL', 60),
     ],
 
 ];

@@ -22,7 +22,7 @@ class RegisterAgentRequest extends FormRequest
             'os_version' => ['nullable', 'string', 'max:255'],
             'architecture' => ['nullable', 'string', 'max:50'],
             'agent_version' => ['nullable', 'string', 'max:50'],
-            'ip_address' => ['required', 'ip', 'unique:devices,ip_address'],
+            'ip_address' => ['required', 'ip'],
             'mac_address' => ['nullable', 'string', 'max:17'],
             'agent_uuid' => ['nullable', 'uuid'],
         ];

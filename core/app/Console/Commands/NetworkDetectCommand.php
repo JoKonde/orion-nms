@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\NmapScanJob;
 use App\Services\Monitoring\NetworkDetectionService;
+use App\Services\Monitoring\NmapService;
 use Illuminate\Console\Command;
 
 /**
@@ -19,7 +19,7 @@ class NetworkDetectCommand extends Command
 
     protected $description = 'Detecte l\'IP locale et le sous-reseau ORION (premiere configuration)';
 
-    public function handle(NetworkDetectionService $networkDetection): int
+    public function handle(NetworkDetectionService $networkDetection, NmapService $nmapService): int
     {
         $context = $networkDetection->getDetectionContext();
 
@@ -49,8 +49,13 @@ class NetworkDetectCommand extends Command
         if ($this->option('scan')) {
             $resolved = $networkDetection->resolveDiscoverySubnet();
             $this->info("Lancement du scan Nmap sur {$resolved['subnet']}...");
-            NmapScanJob::dispatchSync($resolved['subnet']);
-            $this->info('Scan termine.');
+            $result = $nmapService->discoverSubnet($resolved['subnet'], forceDirect: true);
+            $this->info("Scan termine : {$result['hosts_found']} hote(s), {$result['devices_created']} nouveau(x), {$result['devices_updated']} mis a jour, {$result['devices_removed']} retire(s).");
+            if (! empty($result['error'])) {
+                $this->error($result['error']);
+            } elseif (! empty($result['warning'])) {
+                $this->warn($result['warning']);
+            }
         } else {
             $this->comment('Pour scanner : php artisan orion:network-detect --scan');
             $this->comment('Ou : php artisan orion:discover');

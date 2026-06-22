@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\AgentStatus;
+use App\Events\AgentStatusChanged;
 use App\Events\AgentWentOffline;
 use App\Models\Agent;
 use Illuminate\Bus\Queueable;
@@ -45,10 +46,12 @@ class CheckAgentsOfflineJob implements ShouldQueue
                     ->orWhereNull('last_seen_at');
             })
             ->each(function (Agent $agent) {
+                $previousStatus = $agent->status->value;
+
                 $agent->update(['status' => AgentStatus::OFFLINE]);
 
-                // On declenche un Event plutot que de tout faire ici (voir AgentWentOffline).
                 AgentWentOffline::dispatch($agent);
+                AgentStatusChanged::dispatch($agent->fresh(), $previousStatus);
             });
     }
 }
