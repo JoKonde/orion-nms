@@ -52,6 +52,12 @@ enum PermissionName: string
     // Dashboard (Module 12)
     case DASHBOARD_VIEW = 'dashboard.view';
 
+    // ORION AI (Module 10)
+    case AI_USE = 'ai.use';
+
+    // Rapports (Module 11)
+    case REPORTS_VIEW = 'reports.view';
+
     /**
      * Retourne la liste de toutes les permissions sous forme de chaines.
      *

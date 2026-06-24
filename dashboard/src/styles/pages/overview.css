@@ -24,10 +24,24 @@
   width: 100%;
 }
 
+.overview-health-panel__subtitle {
+  margin: -0.35rem 0 0.5rem;
+  width: 100%;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  line-height: 1.45;
+}
+
+.overview-page__refreshing {
+  color: var(--color-accent);
+  font-style: italic;
+}
+
 .overview-kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 @media (max-width: 768px) {

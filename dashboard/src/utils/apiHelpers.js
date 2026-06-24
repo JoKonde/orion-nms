@@ -18,6 +18,15 @@ export function unwrapPaginated(payload) {
     };
   }
 
+  // Collection Laravel sans pagination (ex. GET /devices/{id}/metrics)
+  if (Array.isArray(payload.data)) {
+    return {
+      items: payload.data,
+      meta: null,
+      links: null,
+    };
+  }
+
   // Double enveloppe eventuelle { data: { data: [], meta: {} } }
   const inner = payload.data ?? payload;
   if (inner && Array.isArray(inner.data)) {

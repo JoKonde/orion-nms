@@ -10,8 +10,11 @@ export default defineConfig({
   root: path.join(__dirname, 'src'),
   base: './',
   server: {
+    host: '127.0.0.1',
     port: 5174,
     strictPort: true,
+    // electron-dev lance Electron ; npm run dev = navigateur seulement
+    open: false,
   },
   build: {
     outDir: path.join(__dirname, 'dist'),

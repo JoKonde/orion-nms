@@ -2,18 +2,21 @@
 
 namespace App\Providers;
 
+use App\Events\AgentStatusChanged;
 use App\Events\AgentWentOffline;
 use App\Events\AlertRaised;
+use App\Events\AlertUpdated;
 use App\Events\DeviceBackOnline;
 use App\Events\DeviceDiscovered;
 use App\Events\DeviceWentOffline;
 use App\Events\IncidentUpdated;
 use App\Events\MetricReceived;
 use App\Events\TopologyUpdated;
+use App\Listeners\AnalyzeCriticalAlertWithAi;
 use App\Listeners\EscalateCriticalAlertToIncident;
 use App\Listeners\EvaluateAlertsOnDeviceOffline;
 use App\Listeners\EvaluateAlertsOnMetricReceived;
-use App\Listeners\LinkDeviceOnDiscovery;
+use App\Listeners\InvalidateDashboardCache;
 use App\Listeners\LogAgentOffline;
 use App\Listeners\LogAlertRaised;
 use App\Listeners\LogDeviceDiscovered;
@@ -54,29 +57,44 @@ class EventServiceProvider extends ServiceProvider
         DeviceDiscovered::class => [
             LogDeviceDiscovered::class,
             LinkDeviceOnDiscovery::class,
+            InvalidateDashboardCache::class,
         ],
 
         AlertRaised::class => [
             LogAlertRaised::class,
             EscalateCriticalAlertToIncident::class,
+            AnalyzeCriticalAlertWithAi::class,
+            InvalidateDashboardCache::class,
+        ],
+
+        AlertUpdated::class => [
+            InvalidateDashboardCache::class,
         ],
 
         IncidentUpdated::class => [
             LogIncidentUpdated::class,
+            InvalidateDashboardCache::class,
         ],
 
         DeviceWentOffline::class => [
             EvaluateAlertsOnDeviceOffline::class,
             RefreshTopologyOnDeviceStatus::class,
+            InvalidateDashboardCache::class,
         ],
 
         DeviceBackOnline::class => [
             ResolveAlertsOnDeviceOnline::class,
             RefreshTopologyOnDeviceStatus::class,
+            InvalidateDashboardCache::class,
         ],
 
         TopologyUpdated::class => [
             LogTopologyUpdated::class,
+            InvalidateDashboardCache::class,
+        ],
+
+        AgentStatusChanged::class => [
+            InvalidateDashboardCache::class,
         ],
     ];
 

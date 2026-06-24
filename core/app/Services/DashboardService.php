@@ -78,6 +78,7 @@ class DashboardService
                 'active' => $stats['alerts_active'],
                 'critical' => $stats['alerts_critical'],
                 'warning' => $stats['alerts_warning'],
+                'info' => $stats['alerts_info'],
             ],
             'incidents' => [
                 'open' => $stats['incidents_open'],
@@ -89,6 +90,7 @@ class DashboardService
             'health' => [
                 'score' => $health['score'],
                 'grade' => $health['grade'],
+                'factors' => $health['factors'],
             ],
             'generated_at' => now()->toIso8601String(),
         ]);
@@ -125,6 +127,8 @@ class DashboardService
                 ->where('severity', AlertSeverity::CRITICAL)->count(),
             'alerts_warning' => Alert::whereIn('status', AlertStatus::activeValues())
                 ->where('severity', AlertSeverity::WARNING)->count(),
+            'alerts_info' => Alert::whereIn('status', AlertStatus::activeValues())
+                ->where('severity', AlertSeverity::INFO)->count(),
             'incidents_open' => Incident::whereIn('status', IncidentStatus::openValues())->count(),
             'incidents_critical' => Incident::whereIn('status', IncidentStatus::openValues())
                 ->where('priority', 'critical')->count(),

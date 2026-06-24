@@ -12,6 +12,8 @@ enum MetricType: string
 {
     case CPU = 'cpu';
     case RAM = 'ram';
+    case RAM_TOTAL = 'ram_total';
+    case SWAP_USAGE = 'swap_usage';
     case DISK = 'disk';
     case DISK_USAGE = 'disk_usage';
     case TEMPERATURE = 'temperature';

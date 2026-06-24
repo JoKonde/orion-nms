@@ -34,6 +34,10 @@ Broadcast::channel('org.topology', function ($user) {
     return $user->can(PermissionName::TOPOLOGY_VIEW->value);
 });
 
+Broadcast::channel('org.ai', function ($user) {
+    return $user->can(PermissionName::AI_USE->value);
+});
+
 Broadcast::channel('device.{deviceId}.metrics', function ($user, int $deviceId) {
     if (! $user->can(PermissionName::DEVICES_VIEW->value)) {
         return false;

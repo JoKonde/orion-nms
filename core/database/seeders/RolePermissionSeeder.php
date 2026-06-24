@@ -58,6 +58,8 @@ class RolePermissionSeeder extends Seeder
             PermissionName::TOPOLOGY_VIEW->value,
             PermissionName::TOPOLOGY_MANAGE->value,
             PermissionName::DASHBOARD_VIEW->value,
+            PermissionName::AI_USE->value,
+            PermissionName::REPORTS_VIEW->value,
         ]);
 
         // VIEWER : lecture seule.
@@ -69,6 +71,7 @@ class RolePermissionSeeder extends Seeder
             PermissionName::INCIDENTS_VIEW->value,
             PermissionName::TOPOLOGY_VIEW->value,
             PermissionName::DASHBOARD_VIEW->value,
+            PermissionName::REPORTS_VIEW->value,
         ]);
     }
 }

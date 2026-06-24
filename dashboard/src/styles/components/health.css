@@ -55,12 +55,25 @@
 }
 
 .health-factors__title {
-  margin: 0 0 1rem;
+  margin: 0 0 0.5rem;
   font-size: 0.8125rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-text-muted);
+}
+
+.health-factors__lead {
+  margin: 0 0 1rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.health-factors__empty {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-dim);
 }
 
 .health-factors__list {
@@ -105,4 +118,145 @@
   font-family: var(--font-mono);
   color: var(--color-text);
   white-space: nowrap;
+}
+
+.health-factors__contrib {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.health-factors__contrib--up {
+  color: var(--color-success);
+}
+
+.health-factors__contrib--down {
+  color: var(--color-danger);
+}
+
+/* Guide sante — bloc explicatif page d'accueil */
+.health-guide {
+  margin-bottom: 1.5rem;
+}
+
+.health-guide__intro p {
+  margin: 0 0 0.65rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+.health-guide__current {
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+}
+
+.health-guide__note {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-text-dim);
+}
+
+.health-guide__block {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.health-guide__block h4 {
+  margin: 0 0 0.65rem;
+  font-size: 0.9375rem;
+}
+
+.health-guide__formula {
+  margin: 0 0 0.5rem;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  background: var(--color-bg-main);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.health-guide__example {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--color-accent);
+}
+
+.health-guide__example.mono {
+  font-family: var(--font-mono);
+}
+
+.health-guide__list,
+.health-guide__tips {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+.health-guide__list li,
+.health-guide__tips li {
+  margin-bottom: 0.5rem;
+}
+
+.health-guide__hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: var(--color-text-dim);
+  font-style: italic;
+}
+
+.health-guide__grades {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.health-guide__grades li {
+  display: grid;
+  grid-template-columns: 4.5rem 5rem 1fr;
+  gap: 0.5rem 0.75rem;
+  align-items: baseline;
+  font-size: 0.8125rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.health-guide__grades li:last-child {
+  border-bottom: none;
+}
+
+.health-guide__grade-range {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-text-dim);
+}
+
+.health-guide__tips {
+  list-style: decimal;
+}
+
+.health-guide code {
+  font-size: 0.75rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  background: var(--color-bg-elevated);
+}
+
+@media (max-width: 640px) {
+  .health-guide__grades li {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
 }

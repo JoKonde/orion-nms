@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\AlertStatus;
+use App\Events\AlertUpdated;
 use App\Models\Alert;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -38,7 +39,11 @@ class AlertService
             'acknowledged_by' => $user->id,
         ]);
 
-        return $alert->fresh(['device', 'rule', 'acknowledgedByUser']);
+        $alert = $alert->fresh(['device', 'rule', 'acknowledgedByUser']);
+
+        AlertUpdated::dispatch($alert, 'acknowledged');
+
+        return $alert;
     }
 
     public function resolve(Alert $alert, User $user): Alert
@@ -49,7 +54,11 @@ class AlertService
             'resolved_by' => $user->id,
         ]);
 
-        return $alert->fresh(['device', 'rule', 'resolvedByUser']);
+        $alert = $alert->fresh(['device', 'rule', 'resolvedByUser']);
+
+        AlertUpdated::dispatch($alert, 'resolved');
+
+        return $alert;
     }
 
     /**

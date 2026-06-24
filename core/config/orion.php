@@ -50,4 +50,32 @@ return [
         'cache_ttl' => (int) env('ORION_DASHBOARD_CACHE_TTL', 60),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | ORION AI (Module 10 — OpenRouter)
+    |--------------------------------------------------------------------------
+    |
+    | La cle API reste dans .env (OPENROUTER_API_KEY). Jamais exposee au frontend.
+    | Modeles gratuits : suffixe :free sur openrouter.ai/models
+    |
+    */
+    'ai' => [
+        'enabled' => (bool) env('ORION_AI_ENABLED', false),
+        'api_key' => env('OPENROUTER_API_KEY'),
+        'model' => env('OPENROUTER_MODEL', 'openrouter/free'),
+        'fallback_model' => env('OPENROUTER_FALLBACK_MODEL', 'openrouter/free'),
+        'base_url' => env('OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1'),
+        'max_tokens' => (int) env('ORION_AI_MAX_TOKENS', 1024),
+        'rate_limit_per_minute' => (int) env('ORION_AI_RATE_LIMIT_PER_MINUTE', 20),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Rapports (Module 11)
+    |--------------------------------------------------------------------------
+    */
+    'reports' => [
+        'max_rows' => (int) env('ORION_REPORTS_MAX_ROWS', 5000),
+    ],
+
 ];

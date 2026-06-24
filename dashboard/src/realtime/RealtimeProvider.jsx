@@ -10,11 +10,13 @@ const MAX_NOTIFICATIONS = 30;
 /** Labels francais pour les events Reverb. */
 const EVENT_LABELS = {
   'alert.raised': 'Nouvelle alerte',
+  'alert.updated': 'Alerte mise a jour',
   'incident.updated': 'Incident mis a jour',
   'device.discovered': 'Equipement decouvert',
   'agent.status.changed': 'Statut agent modifie',
   'metric.received': 'Metrique recue',
   'topology.updated': 'Topologie mise a jour',
+  'ai.insight.created': 'Analyse ORION AI',
 };
 
 /**
@@ -83,6 +85,7 @@ export function RealtimeProvider({ children }) {
 
         if (hasPermission(user, 'alerts.view') && channels.alerts) {
           subscribeChannel(echo, channels.alerts, 'alert.raised');
+          subscribeChannel(echo, channels.alerts, 'alert.updated');
         }
         if (hasPermission(user, 'incidents.view') && channels.incidents) {
           subscribeChannel(echo, channels.incidents, 'incident.updated');
@@ -95,6 +98,9 @@ export function RealtimeProvider({ children }) {
         }
         if (hasPermission(user, 'topology.view') && channels.topology) {
           subscribeChannel(echo, channels.topology, 'topology.updated');
+        }
+        if (hasPermission(user, 'ai.use') && channels.ai) {
+          subscribeChannel(echo, channels.ai, 'ai.insight.created');
         }
       } catch {
         if (!cancelled) {

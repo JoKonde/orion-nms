@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 /** Modal — fenetre modale reutilisable. */
-export function Modal({ open, title, onClose, children, wide = false }) {
+export function Modal({ open, title, onClose, children, wide = false, charts = false }) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e) => {
@@ -16,7 +16,7 @@ export function Modal({ open, title, onClose, children, wide = false }) {
   return (
     <div className="modal-overlay" onClick={onClose} role="presentation">
       <div
-        className={`modal${wide ? ' modal--wide' : ''}`}
+        className={`modal${charts ? ' modal--charts' : wide ? ' modal--wide' : ''}`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"

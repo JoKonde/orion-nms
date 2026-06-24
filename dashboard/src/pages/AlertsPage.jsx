@@ -11,6 +11,7 @@ import { StatusBadge } from '../components/ui/StatusBadge';
 import { Spinner } from '../components/ui/Spinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
+import { AiAnalyzeModal, useAiAnalyze } from '../components/ai/AiPanel';
 import { usePermission } from '../hooks/usePermission';
 import { useRealtimeRefresh } from '../hooks/useRealtimeRefresh';
 import { ALERT_STATUSES, ALERT_SEVERITIES } from '../utils/constants';
@@ -19,6 +20,8 @@ import { formatDate, formatLabel } from '../utils/format';
 export function AlertsPage() {
   const canManage = usePermission('alerts.manage');
   const canCreateIncident = usePermission('incidents.create');
+  const canUseAi = usePermission('ai.use');
+  const ai = useAiAnalyze();
   const navigate = useNavigate();
 
   const [tab, setTab] = useState('events');
@@ -162,6 +165,16 @@ export function AlertsPage() {
       label: 'Actions',
       render: (r) => (
         <div className="row-actions">
+          {canUseAi && r.status !== 'resolved' && (
+            <button
+              type="button"
+              className="btn btn--sm ai-btn-analyze"
+              disabled={actionLoading === r.id}
+              onClick={() => ai.runAlert(r)}
+            >
+              IA
+            </button>
+          )}
           {canManage && r.status === 'raised' && (
             <button
               type="button"
@@ -312,6 +325,15 @@ export function AlertsPage() {
           )}
         </>
       )}
+
+      <AiAnalyzeModal
+        open={ai.open}
+        title={ai.title}
+        loading={ai.loading}
+        content={ai.content}
+        error={ai.error}
+        onClose={ai.close}
+      />
 
       <AlertRuleFormModal
         open={ruleModalOpen}

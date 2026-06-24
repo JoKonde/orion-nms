@@ -31,15 +31,18 @@ class RealtimeController extends Controller
                 'devices' => 'org.devices',
                 'agents' => 'org.agents',
                 'topology' => 'org.topology',
+                'ai' => 'org.ai',
                 'device_metrics' => 'device.{deviceId}.metrics',
             ],
             'events' => [
                 'alert.raised',
+                'alert.updated',
                 'incident.updated',
                 'device.discovered',
                 'agent.status.changed',
                 'metric.received',
                 'topology.updated',
+                'ai.insight.created',
             ],
         ]);
     }

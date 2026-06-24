@@ -66,7 +66,8 @@ class MetricController extends Controller
             $metrics = $this->metricService->queryHourly($device->id, $type, $from, $to);
         } else {
             $limit = min((int) $request->get('limit', 1000), 5000);
-            $metrics = $this->metricService->queryRaw($device->id, $type, $from, $to, $limit);
+            $order = $request->get('order', 'asc') === 'desc' ? 'desc' : 'asc';
+            $metrics = $this->metricService->queryRaw($device->id, $type, $from, $to, $limit, $order);
         }
 
         return MetricResource::collection($metrics);

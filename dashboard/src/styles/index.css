@@ -19,4 +19,7 @@
 @import './pages/placeholder.css';
 @import './pages/overview.css';
 @import './pages/crud.css';
+@import './pages/ai.css';
+@import './pages/reports.css';
+@import './pages/help.css';
 @import './pages/topology.css';

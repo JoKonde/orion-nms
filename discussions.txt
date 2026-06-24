@@ -1,0 +1,70 @@
+[18/06/2026] Agent IP locale + topologie
+- Sujet : pourquoi ORION-9532a60e isole en topologie ; ou voir CPU/RAM ; IP 127.0.0.1
+- Cause : mode navigateur, WebRTC echoue → fallback 127.0.0.1 ; pas d'UI metriques dashboard
+- Corrections agent :
+  * Detection WebRTC amelioree (STUN Google, timeout 8s, priorite IP privee)
+  * Champs hostname + IP locale + bouton Detecter
+  * Refus enregistrement si IP = 127.0.0.1 (agent + API Laravel)
+  * Affichage IP locale + date enregistrement dans statut agent
+- Prochaines etapes : re-enregistrer agent avec IP LAN puis Reconstruire topologie
+
+[23/06/2026] Fix electron-dev fenetre desktop
+- Cause : Vite sur localhost (IPv6) mais launch.cjs testait 127.0.0.1 → timeout, seul navigateur s'ouvrait
+- Page Aide (/help) dans sidebar : alerte vs incident, workflows resolution, guide modules ORION
+
+[24/06/2026] ORION AI Module 10 implemente
+- Niveau 1 : POST /ai/chat avec contexte reseau
+- Niveau 2 : POST /ai/analyze/alert|incident + boutons IA dashboard
+- Niveau 3 : listener alerte critical → AnalyzeAlertWithAiJob → ai_insights + broadcast
+- Permission ai.use, page /ai, config OpenRouter dans orion.php
+- Supprimer ORION-9532a60e : page Agents → Suppr. (supprime aussi le device) OU Equipements → meme device
+- Ajout bouton Details sur AgentsPage : CPU, RAM, disque total/libre/%, uptime
+- API metrics : param order=desc pour derniere valeur ; agent Electron envoie disk (Go total)
+
+[18/06/2026] OpenRouter valide — openrouter/free OK
+- Sujet : test Postman chat/completions avec model openrouter/free
+- Resultat : 200 OK, reponse en francais (routage vers cohere/north-mini-code-20260617:free)
+- Config .env deja alignee : OPENROUTER_MODEL=openrouter/free, BASE_URL sans double /chat/completions
+- OrionAiService : retry sur rate-limit (retry_after_seconds metadata), fallback modele
+- Prochaines etapes : php artisan config:clear (fait), tester chat ORION AI dans dashboard /ai
+
+[18/06/2026] UI ORION AI — panneau analyses scrollable
+- Colonne droite Analyses recentes : conteneur flex + overflow-y auto (hauteur alignee sur le chat)
+- Suppression troncature 120px sur le texte de chaque carte insight
+
+[18/06/2026] ORION AI — rendu Markdown des reponses
+- Composant AiMarkdown (react-markdown) : chat, analyses recentes, modales alerte/incident
+- Styles titres ###, gras **, listes dans ai.css
+
+[18/06/2026] Page Aide — section ORION AI
+- Module 10 documente : 3 niveaux, chat, bouton IA, analyses proactives, config .env, permission ai.use
+- Entree menu ORION AI mise a jour (plus Soon)
+
+[18/06/2026] Vue d'ensemble — corrections dashboard
+- InvalidateDashboardCache sur alertes, incidents, devices, agents, topologie
+- Event AlertUpdated (ack/resolve) + broadcast alert.updated
+- Overview inclut health.factors + alerts.info ; param ?fresh=1
+- Frontend : 1 seul appel API, refresh sans spinner plein ecran, KPIs avant HealthGuide
+
+[18/06/2026] Details agent — RAM totale
+- Metrique ram_total (Go) envoyee par agent Electron
+- Modal : RAM totale, utilisee %, utilisee Go, libre Go
+
+[18/06/2026] Metriques agent — reseau, swap, temperature
+- Agent : network_in/out (Mbit/s), swap_usage (%), temperature (°C si capteur dispo)
+- Modal Details : sections CPU, Memoire, Disque, Reseau
+
+[18/06/2026] Module 11 Rapports implemente
+- 5 types : synthese reseau, equipements, agents, alertes, incidents
+- API : GET /reports/types, /preview, /export (csv|html)
+- Permission reports.view (admin, operateur, lecteur)
+- Page /reports : apercu, export CSV, HTML imprimable (PDF navigateur)
+
+[18/06/2026] Graphiques metriques historiques
+- Chart.js dans modal Details agent : CPU, RAM, disque, swap, reseau, temperature
+- Periodes 24h (brut), 7j et 30j (horaire avec fallback brut)
+- API existante GET /devices/{id}/metrics?granularity=hourly
+
+[18/06/2026] README racine — guide installation dev
+- README.md monorepo : core, dashboard, agent, nmap, reverb, exe, IP LAN, PHP 8.2/8.3
+- Depot public : https://github.com/JoKonde/orion-nms

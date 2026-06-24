@@ -4,6 +4,7 @@ import { useRealtimeRefresh } from '../hooks/useRealtimeRefresh';
 import { KpiCard } from '../components/dashboard/KpiCard';
 import { HealthGauge } from '../components/dashboard/HealthGauge';
 import { HealthFactors } from '../components/dashboard/HealthFactors';
+import { HealthGuide } from '../components/dashboard/HealthGuide';
 import { Spinner } from '../components/ui/Spinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 
@@ -22,10 +23,17 @@ function formatGeneratedAt(iso) {
  */
 export function OverviewPage() {
   const { user } = useAuth();
-  const { overview, health, loading, error, refresh } = useDashboard();
+  const { overview, loading, refreshing, error, refresh } = useDashboard();
 
   useRealtimeRefresh(
-    ['alert.raised', 'incident.updated', 'agent.status.changed', 'topology.updated', 'device.discovered'],
+    [
+      'alert.raised',
+      'alert.updated',
+      'incident.updated',
+      'agent.status.changed',
+      'topology.updated',
+      'device.discovered',
+    ],
     refresh,
   );
 
@@ -46,6 +54,7 @@ export function OverviewPage() {
   }
 
   const { devices, agents, alerts, incidents, topology, health: healthSummary } = overview ?? {};
+  const factors = healthSummary?.factors;
 
   return (
     <div className="page overview-page">
@@ -55,20 +64,24 @@ export function OverviewPage() {
           <p className="page__subtitle">
             Supervision reseau ORION — donnees mises a jour le{' '}
             {formatGeneratedAt(overview?.generated_at)}
+            {refreshing && <span className="overview-page__refreshing"> (actualisation…)</span>}
           </p>
         </div>
-        <button type="button" className="btn btn--secondary" onClick={refresh}>
-          Actualiser
+        <button type="button" className="btn btn--secondary" onClick={refresh} disabled={refreshing}>
+          {refreshing ? 'Actualisation…' : 'Actualiser'}
         </button>
       </div>
 
       <section className="overview-health-panel">
         <article className="card overview-health-panel__gauge">
           <h3 className="card__title">Sante reseau</h3>
+          <p className="overview-health-panel__subtitle">
+            Note globale de 0 a 100 sur l&apos;etat de votre parc
+          </p>
           <HealthGauge score={healthSummary?.score ?? 0} grade={healthSummary?.grade ?? 'good'} />
         </article>
         <article className="card overview-health-panel__factors">
-          <HealthFactors factors={health?.factors} />
+          <HealthFactors factors={factors} />
         </article>
       </section>
 
@@ -105,6 +118,7 @@ export function OverviewPage() {
           stats={[
             { label: 'Critical', value: alerts?.critical ?? 0, variant: 'danger' },
             { label: 'Warning', value: alerts?.warning ?? 0, variant: 'warning' },
+            { label: 'Info', value: alerts?.info ?? 0, variant: 'info' },
           ]}
         />
         <KpiCard
@@ -129,6 +143,12 @@ export function OverviewPage() {
           linkTo="/topology"
         />
       </section>
+
+      <HealthGuide
+        score={healthSummary?.score ?? 0}
+        grade={healthSummary?.grade ?? 'good'}
+        factors={factors}
+      />
     </div>
   );
 }

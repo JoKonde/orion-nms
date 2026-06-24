@@ -70,23 +70,38 @@ export const NAV_SECTIONS = [
     ],
   },
   {
-    label: 'A venir',
+    label: 'Rapports',
+    items: [
+      {
+        id: 'reports',
+        label: 'Rapports',
+        path: '/reports',
+        permission: 'reports.view',
+        icon: '📄',
+      },
+    ],
+  },
+  {
+    label: 'Aide',
+    items: [
+      {
+        id: 'help',
+        label: 'Aide',
+        path: '/help',
+        permission: null,
+        icon: '?',
+      },
+    ],
+  },
+  {
+    label: 'Intelligence',
     items: [
       {
         id: 'ai',
         label: 'ORION AI',
         path: '/ai',
-        permission: null,
+        permission: 'ai.use',
         icon: '✦',
-        soon: true,
-      },
-      {
-        id: 'reports',
-        label: 'Rapports',
-        path: '/reports',
-        permission: null,
-        icon: '📄',
-        soon: true,
       },
     ],
   },

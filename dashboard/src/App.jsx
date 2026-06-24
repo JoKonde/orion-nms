@@ -12,7 +12,9 @@ import { IncidentsPage } from './pages/IncidentsPage';
 import { NetworkPage } from './pages/NetworkPage';
 import { TopologyPage } from './pages/TopologyPage';
 import { UsersPage } from './pages/UsersPage';
-import { SoonPage } from './pages/SoonPage';
+import { AiPage } from './pages/AiPage';
+import { HelpPage } from './pages/HelpPage';
+import { ReportsPage } from './pages/ReportsPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export default function App() {
@@ -41,18 +43,12 @@ export default function App() {
               <Route path="topology" element={<TopologyPage />} />
               <Route path="network" element={<NetworkPage />} />
               <Route path="users" element={<UsersPage />} />
+              <Route path="help" element={<HelpPage />} />
               <Route
                 path="ai"
-                element={
-                  <SoonPage title="ORION AI" moduleLabel="Module 10 — OpenRouter" />
-                }
+                element={<AiPage />}
               />
-              <Route
-                path="reports"
-                element={
-                  <SoonPage title="Rapports" moduleLabel="Module 11 — Reports" />
-                }
-              />
+              <Route path="reports" element={<ReportsPage />} />
             </Route>
           </Route>
 

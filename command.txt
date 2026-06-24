@@ -1,3 +1,4 @@
+php artisan serve --host=0.0.0.0 --port=8001
 php artisan schedule:work
 php artisan reverb:start
 php artisan orion:network-detect --scan

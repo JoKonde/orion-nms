@@ -76,10 +76,11 @@ class MetricIngestionService
         ?string $from,
         ?string $to,
         int $limit = 1000,
+        string $order = 'asc',
     ): Collection {
         $query = Metric::query()
             ->where('device_id', $deviceId)
-            ->orderBy('recorded_at');
+            ->orderBy('recorded_at', $order === 'desc' ? 'desc' : 'asc');
 
         if ($metricType) {
             $query->where('metric_type', $metricType);

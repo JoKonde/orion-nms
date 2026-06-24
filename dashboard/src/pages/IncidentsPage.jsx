@@ -10,6 +10,7 @@ import { Spinner } from '../components/ui/Spinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { IncidentFormModal } from '../components/incidents/IncidentFormModal';
+import { AiAnalyzeModal, useAiAnalyze } from '../components/ai/AiPanel';
 import { Modal } from '../components/ui/Modal';
 import { useAuth } from '../auth/AuthContext';
 import { usePermission } from '../hooks/usePermission';
@@ -23,6 +24,8 @@ export function IncidentsPage() {
   const canAssign = usePermission('incidents.assign');
   const canClose = usePermission('incidents.close');
   const canDelete = usePermission('incidents.update'); // pas de permission delete dediee viewer
+  const canUseAi = usePermission('ai.use');
+  const ai = useAiAnalyze();
 
   const [searchParams] = useSearchParams();
   const highlightId = searchParams.get('highlight');
@@ -137,6 +140,15 @@ export function IncidentsPage() {
       label: 'Actions',
       render: (r) => (
         <div className="row-actions">
+          {canUseAi && !['closed'].includes(r.status) && (
+            <button
+              type="button"
+              className="btn btn--sm ai-btn-analyze"
+              onClick={() => ai.runIncident(r)}
+            >
+              IA
+            </button>
+          )}
           <button type="button" className="btn btn--secondary btn--sm" onClick={() => openDetail(r)}>
             Detail
           </button>
@@ -211,6 +223,15 @@ export function IncidentsPage() {
         onConfirm={handleDelete}
       />
 
+      <AiAnalyzeModal
+        open={ai.open}
+        title={ai.title}
+        loading={ai.loading}
+        content={ai.content}
+        error={ai.error}
+        onClose={ai.close}
+      />
+
       <Modal
         open={!!detailTarget}
         title={detailTarget?.title ?? 'Incident'}
@@ -240,6 +261,16 @@ export function IncidentsPage() {
             </dl>
 
             <div className="row-actions incident-detail__actions">
+              {canUseAi && !['closed'].includes(detailTarget.status) && (
+                <button
+                  type="button"
+                  className="btn btn--sm ai-btn-analyze"
+                  disabled={actionLoading === detailTarget.id}
+                  onClick={() => ai.runIncident(detailTarget)}
+                >
+                  Analyser (IA)
+                </button>
+              )}
               {canAssign && ['open'].includes(detailTarget.status) && (
                 <button
                   type="button"

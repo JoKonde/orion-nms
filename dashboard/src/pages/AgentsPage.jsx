@@ -7,6 +7,7 @@ import { StatusBadge } from '../components/ui/StatusBadge';
 import { Spinner } from '../components/ui/Spinner';
 import { ErrorMessage } from '../components/ui/ErrorMessage';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
+import { AgentDetailsModal } from '../components/agents/AgentDetailsModal';
 import { usePermission } from '../hooks/usePermission';
 import { useRealtimeRefresh } from '../hooks/useRealtimeRefresh';
 import { AGENT_STATUSES } from '../utils/constants';
@@ -22,6 +23,7 @@ export function AgentsPage() {
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState('');
   const [deleteTarget, setDeleteTarget] = useState(null);
+  const [detailsTarget, setDetailsTarget] = useState(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -54,7 +56,7 @@ export function AgentsPage() {
 
   const columns = [
     { key: 'hostname', label: 'Hostname' },
-    { key: 'os', label: 'OS', render: (r) => `${formatLabel(r.os)} ${r.os_version || ''}`.trim() },
+    { key: 'os', label: 'OS', render: (r) => formatLabel(r.os) },
     { key: 'status', label: 'Statut', render: (r) => <StatusBadge value={r.status} /> },
     { key: 'agent_version', label: 'Version' },
     { key: 'device', label: 'Device', render: (r) => r.device?.name ?? '—' },
@@ -62,12 +64,18 @@ export function AgentsPage() {
     {
       key: 'actions',
       label: 'Actions',
-      render: (r) =>
-        canDelete ? (
-          <button type="button" className="btn btn--danger btn--sm" onClick={() => setDeleteTarget(r)}>
-            Suppr.
+      render: (r) => (
+        <div className="row-actions">
+          <button type="button" className="btn btn--secondary btn--sm" onClick={() => setDetailsTarget(r)}>
+            Details
           </button>
-        ) : null,
+          {canDelete && (
+            <button type="button" className="btn btn--danger btn--sm" onClick={() => setDeleteTarget(r)}>
+              Suppr.
+            </button>
+          )}
+        </div>
+      ),
     },
   ];
 
@@ -92,6 +100,8 @@ export function AgentsPage() {
           <Pagination meta={meta} onPageChange={setPage} />
         </>
       )}
+
+      <AgentDetailsModal agent={detailsTarget} onClose={() => setDetailsTarget(null)} />
 
       <ConfirmDialog
         open={!!deleteTarget}
